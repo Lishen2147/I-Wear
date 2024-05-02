@@ -1,0 +1,6 @@
+# Ignore 670MB of datasets
+/AI-model/datasets/testing_set
+/AI-model/datasets/training_set
+
+
+# Ignore credentials
