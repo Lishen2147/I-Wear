@@ -1,9 +1,9 @@
 "use client";
 
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 
 interface UploadFormProps {
-  image: File | null;
+  image: string | null;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -14,7 +14,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ image, onFileChange }) => {
       <input type="file" accept="image/*" onChange={onFileChange} />
       {image && (
         <div>
-          <img src={URL.createObjectURL(image)} alt="Uploaded" />
+          <img src={image} alt="Uploaded" />
         </div>
       )}
     </div>
