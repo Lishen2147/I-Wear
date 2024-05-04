@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import UploadForm from './subcomponents/Upload/UploadForm';
 
 const Upload: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -13,15 +14,7 @@ const Upload: React.FC = () => {
 
   return (
     <div>
-      <div>
-        <h2>Upload Photo</h2>
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-        {image && (
-          <div>
-            <img src={URL.createObjectURL(image)} alt="Uploaded" />
-          </div>
-        )}
-      </div>
+      <UploadForm onFileChange={handleImageChange} image={image} />
     </div>
   );
 };
