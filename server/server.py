@@ -11,14 +11,23 @@ warnings.filterwarnings("ignore")
 
 # Load the model
 
+# Create processing function w/ PIL for image
+
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'image' not in request.files:
-        return jsonify({'error': 'No file provided'})
-    image = request.files['image']
+    print("Request received")
+    if 'uploadFile' not in request.files:
+        return jsonify({'prediction': 'null', 'error': 'No file provided'})
+    
+    image = request.files['uploadFile']
     print(type(image))
+
+    # handle processing & predicting here
     # prediction = model.predict(image)
     # return jsonify({'prediction': prediction.tolist()})
+
+    print("Request processed")
+    return jsonify({'prediction': 'success', 'error': 'null'})
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
