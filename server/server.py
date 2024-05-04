@@ -19,3 +19,6 @@ def predict():
     print(type(image))
     # prediction = model.predict(image)
     # return jsonify({'prediction': prediction.tolist()})
+
+if __name__ == '__main__':
+    app.run(debug=True, port=8080)
