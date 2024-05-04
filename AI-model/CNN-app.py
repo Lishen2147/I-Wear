@@ -98,17 +98,19 @@ def predict_face_shape(user_selfie_path, model_path, num_classes):
         output = model(input_batch)
 
     # Decode predictions
-    predicted_index = torch.argmax(output, dim=1).item()
+    probabilities = torch.softmax(output, dim=1)[0]  # Convert logits to probabilities
     face_shapes = ['Heart', 'Round', 'Oval', 'Square', 'Diamond', 'Oblong']  # Replace with your actual labels
-    predicted_shape = face_shapes[predicted_index]
+    predicted_shapes_with_probabilities = [(face_shape, probability.item()) for face_shape, probability in zip(face_shapes, probabilities)]
 
-    return user_selfie, predicted_shape
+    return user_selfie, predicted_shapes_with_probabilities
 
 # Example usage:
 USER_SELFIE_PATH = './tests/test1.jpg'
 MODEL_PATH = './outputs/best_model_kaggle.pth'
 NUM_CLASSES = 5
 
-user_selfie, predicted_shape = predict_face_shape(USER_SELFIE_PATH, MODEL_PATH, NUM_CLASSES)
+user_selfie, predicted_shapes_with_probabilities = predict_face_shape(USER_SELFIE_PATH, MODEL_PATH, NUM_CLASSES)
 
-print("Predicted face shape:", predicted_shape)
+print("Predicted face shapes with probabilities:")
+for shape, probability in predicted_shapes_with_probabilities:
+    print(f"Face shape: {shape}, Probability: {probability:.2f}")
