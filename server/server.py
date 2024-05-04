@@ -32,7 +32,7 @@ def predict():
     with open('uploaded_image.png', 'wb') as f:
         f.write(image_data)
 
-    return jsonify({'prediction': 'success', 'error': 'null'}), 200
+    return jsonify({'prediction': 'ROUND', 'error': 'null', 'response_code': 200}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
