@@ -1,6 +1,6 @@
 # Ignore 670MB of datasets
-/AI-model/datasets/testing_set
-/AI-model/datasets/training_set
+# /AI-model/datasets/testing_set
+# /AI-model/datasets/training_set
 
 # Ignore large saved .pth files
 best_model_self.pth
