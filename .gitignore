@@ -51,6 +51,6 @@ next-env.d.ts
 /AI-model/datasets/training_set
 /AI-model/outputs/best_model_kaggle.pth
 /AI-model/outputs/best_model_self.pth
-
+/AI-model/__pycache__
 
 # Ignore credentials
