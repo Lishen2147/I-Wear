@@ -1,8 +1,8 @@
 # Ignore 670MB of datasets
-/AI-model/datasets/testing_set
-/AI-model/datasets/training_set
-/AI-model/outputs/best_model_kaggle.pth
-/AI-model/outputs/best_model_self.pth
+/ai_model/datasets/testing_set
+/ai_model/datasets/training_set
+/ai_model/outputs/best_model_kaggle.pth
+/ai_model/outputs/best_model_self.pth
 
 
 # Ignore credentials
@@ -44,3 +44,7 @@
 next-env.d.ts
 
 */.venv
+
+__pycache__
+
+/model
