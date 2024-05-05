@@ -7,6 +7,7 @@ from torchvision import datasets
 from torch.utils.data import DataLoader
 import torchvision.transforms as T
 
+# Define the hyperparameters
 NUM_EPOCHS = 25
 BATCH_SIZE = 24
 NUM_WORKERS = os.cpu_count() - 1
@@ -20,6 +21,7 @@ torch.manual_seed(42)
 os.environ["OMP_NUM_THREADS"] = "1"
 torch.backends.cudnn.enabled = False
 
+# Preprocess the image data
 train_transforms = T.Compose([
     T.Resize((224, 224)),
     T.RandomHorizontalFlip(),
@@ -35,12 +37,14 @@ test_transforms = T.Compose([
     T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
+# Load the training and testing datasets
 train_dataset = datasets.ImageFolder(root=TRAIN_PATH, transform=train_transforms, loader=utils.safe_pil_loader)
 test_dataset = datasets.ImageFolder(root=TEST_PATH, transform=test_transforms, loader=utils.safe_pil_loader)
 
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS)
 test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS)
 
+# Load the pre-trained EfficientNet model
 model = torchvision.models.efficientnet_b4(weights='EfficientNet_B4_Weights.IMAGENET1K_V1')
 num_classes = len(train_dataset.classes)
 model.classifier = nn.Sequential(
@@ -49,9 +53,11 @@ model.classifier = nn.Sequential(
 )
 model.to(DEVICE)
 
+# Define the loss function and optimizer
 criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, betas=(0.9, 0.999), weight_decay=0.01)
 
+# Train the model
 train_losses, train_accuracies = utils.train_model(model, train_loader, criterion, optimizer, DEVICE, NUM_EPOCHS)
 utils.plot_and_save_training_history(train_losses, train_accuracies, SAVE_PLOT_PATH)
 utils.test_model(model, test_loader, criterion, DEVICE)
