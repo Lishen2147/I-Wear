@@ -87,6 +87,7 @@ def overlay_glasses(face_img, glasses_img, landmarks):
 
     return output_img
 
+
 glasses_path = "./glasses"
 
 # Define a dictionary to store the glasses options for each face shape
@@ -105,12 +106,14 @@ for key, value in glasses_dict.items():
 glasses_pred = "round"
 glasses_idx = 0
 
-while True:
+overlays = []
+
+def generate_overlays(image, faces, glasses_dict, glasses_pred, glasses_idx):
     # Load glasses image
     glasses_image_path = glasses_dict[glasses_pred][glasses_idx]
     glasses_image = remove_white_background(glasses_image_path)
     glasses_shape = glasses_image_path.split("/")[-1].split(".")[0]
-    
+
     landmarks_list = []
 
     # Iterate over detected faces
@@ -118,24 +121,56 @@ while True:
         # Detect facial landmarks (simplified example)
         landmarks = [(x + int(w * 0.35), y + int(h * 0.45)), (x + int(w * 0.65), y + int(h * 0.45))]
         landmarks_list.append(landmarks)
-
-    # Overlay the glasses onto the face
-    output_image = overlay_glasses(image.copy(), glasses_image, landmarks_list)
-    output_image = resize_to_fit_window(output_image)
-
-    # Display the resulting image
-    cv2.imshow(f'Glasses Overlay ({glasses_shape} glasses)', output_image)
     
-    # Wait for user input
-    key = cv2.waitKey(0) & 0xFF
-
-    # If 'n' key is pressed, move to the next glasses option
-    if key == ord('n'):
+    for i in range(3):
+        # Overlay the glasses onto the face
+        output_image = overlay_glasses(image.copy(), glasses_image, landmarks_list)
+        output_image = resize_to_fit_window(output_image)
+        overlays.append(output_image)
+        
+        # # Display the resulting image
+        # cv2.imshow(f'Glasses Overlay ({glasses_shape} glasses)', output_image)
+    
+        # # Wait for user input
+        # key = cv2.waitKey(0)
+        
         glasses_idx = (glasses_idx + 1) % len(glasses_dict[glasses_pred])
 
-    # If 'q' key is pressed, quit the loop
-    elif key == ord('q'):
-        break
+    return overlays
 
-# Close all windows
-cv2.destroyAllWindows()
+generate_overlays(image, faces, glasses_dict, glasses_pred, glasses_idx)
+
+# while True:
+#     # Load glasses image
+#     glasses_image_path = glasses_dict[glasses_pred][glasses_idx]
+#     glasses_image = remove_white_background(glasses_image_path)
+#     glasses_shape = glasses_image_path.split("/")[-1].split(".")[0]
+    
+#     landmarks_list = []
+
+#     # Iterate over detected faces
+#     for (x, y, w, h) in faces:
+#         # Detect facial landmarks (simplified example)
+#         landmarks = [(x + int(w * 0.35), y + int(h * 0.45)), (x + int(w * 0.65), y + int(h * 0.45))]
+#         landmarks_list.append(landmarks)
+
+#     # Overlay the glasses onto the face
+#     output_image = overlay_glasses(image.copy(), glasses_image, landmarks_list)
+#     output_image = resize_to_fit_window(output_image)
+
+#     # Display the resulting image
+#     cv2.imshow(f'Glasses Overlay ({glasses_shape} glasses)', output_image)
+    
+#     # Wait for user input
+#     key = cv2.waitKey(0) & 0xFF
+
+#     # If 'n' key is pressed, move to the next glasses option
+#     if key == ord('n'):
+#         glasses_idx = (glasses_idx + 1) % len(glasses_dict[glasses_pred])
+
+#     # If 'q' key is pressed, quit the loop
+#     elif key == ord('q'):
+#         break
+
+# # Close all windows
+# cv2.destroyAllWindows()
