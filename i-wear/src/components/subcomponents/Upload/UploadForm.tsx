@@ -8,9 +8,10 @@ interface UploadFormProps {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setFaceStructure: React.Dispatch<React.SetStateAction<string | null>>
   setIsRequesting: React.Dispatch<React.SetStateAction<boolean>>
+  setProbabilities: React.Dispatch<React.SetStateAction<number[] | null>>;
 }
 
-const UploadForm: React.FC<UploadFormProps> = ({ image, onFileChange, setIsLoading, setFaceStructure, setIsRequesting }) => {
+const UploadForm: React.FC<UploadFormProps> = ({ image, onFileChange, setIsLoading, setFaceStructure, setIsRequesting, setProbabilities}) => {
 const POST_URL = "http://localhost:8080/predict";
 
   const formSubmitHandler = async (e: React.SyntheticEvent) => {
@@ -34,15 +35,15 @@ const POST_URL = "http://localhost:8080/predict";
         return
     }
     setFaceStructure(response.prediction);
+    setProbabilities(response.prediction_probabilities)
     setTimeout(() => {
         setIsRequesting(false);
         setFaceStructure(null);
-
-    }, 10000);
+        setProbabilities(response.prediction_probabilities)
+    }, 20000);
   } catch {
     setIsRequesting(false);
-      setFaceStructure(null);
-      setIsLoading(false);
+    setIsLoading(false);
   }
 };
 
