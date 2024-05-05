@@ -49,8 +49,13 @@ next-env.d.ts
 # Ignore 670MB of datasets
 /AI-model/datasets/testing_set
 /AI-model/datasets/training_set
-/AI-model/outputs/best_model_kaggle.pth
-/AI-model/outputs/best_model_self.pth
-/AI-model/__pycache__
+
+# Ignore large saved .pth files
+*.pth
 
 # Ignore credentials
+
+# Ignore system files
+/AI-model/__pycache__
+.DS_Store
+*:Zone.Identifier
