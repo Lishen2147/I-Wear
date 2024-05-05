@@ -91,6 +91,7 @@ def overlay_glasses(face_img, glasses_img, landmarks):
 glasses_path = "./glasses"
 
 # Define a dictionary to store the glasses options for each face shape
+# Maps face predictions to possible glasses shapes
 glasses_dict = {
     "heart": ["oval", "rectangle", "round"],
     "oblong": ["horn", "oval", "square"],
@@ -103,14 +104,14 @@ glasses_dict = {
 for key, value in glasses_dict.items():
     glasses_dict[key] = [f"{glasses_path}/{glasses}.png" for glasses in value]
 
-glasses_pred = "round"
+faces_pred = "round"
 glasses_idx = 0
 
 overlays = []
 
-def generate_overlays(image, faces, glasses_dict, glasses_pred, glasses_idx):
+def generate_overlays(image, faces, glasses_dict, faces_pred, glasses_idx):
     # Load glasses image
-    glasses_image_path = glasses_dict[glasses_pred][glasses_idx]
+    glasses_image_path = glasses_dict[faces_pred][glasses_idx]
     glasses_image = remove_white_background(glasses_image_path)
     glasses_shape = glasses_image_path.split("/")[-1].split(".")[0]
 
@@ -134,15 +135,15 @@ def generate_overlays(image, faces, glasses_dict, glasses_pred, glasses_idx):
         # # Wait for user input
         # key = cv2.waitKey(0)
         
-        glasses_idx = (glasses_idx + 1) % len(glasses_dict[glasses_pred])
+        glasses_idx = (glasses_idx + 1) % len(glasses_dict[faces_pred])
 
     return overlays
 
-generate_overlays(image, faces, glasses_dict, glasses_pred, glasses_idx)
+generate_overlays(image, faces, glasses_dict, faces_pred, glasses_idx)
 
 # while True:
 #     # Load glasses image
-#     glasses_image_path = glasses_dict[glasses_pred][glasses_idx]
+#     glasses_image_path = glasses_dict[faces_pred][glasses_idx]
 #     glasses_image = remove_white_background(glasses_image_path)
 #     glasses_shape = glasses_image_path.split("/")[-1].split(".")[0]
     
@@ -166,7 +167,7 @@ generate_overlays(image, faces, glasses_dict, glasses_pred, glasses_idx)
 
 #     # If 'n' key is pressed, move to the next glasses option
 #     if key == ord('n'):
-#         glasses_idx = (glasses_idx + 1) % len(glasses_dict[glasses_pred])
+#         glasses_idx = (glasses_idx + 1) % len(glasses_dict[faces_pred])
 
 #     # If 'q' key is pressed, quit the loop
 #     elif key == ord('q'):
