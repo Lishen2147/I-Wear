@@ -1,6 +1,6 @@
 {
     "model_params": {
         "num_classes": 5,
-        "facial_structure_classes": ["Heart", "Round", "Oval", "Square", "Diamond", "Oblong"]
+        "facial_structure_classes": ["Heart", "Oblong", "Oval", "Round", "Square"]
     }
 }
