@@ -5,6 +5,22 @@ import torchvision.transforms as T
 from PIL import Image
 
 def predict_face_shape(user_selfie_path, model_path, num_classes):
+    """
+    Predicts the face shape of a user's selfie image using a pre-trained convolutional neural network model.
+
+    Args:
+        user_selfie_path (str): The file path of the user's selfie image.
+        model_path (str): The file path of the pre-trained model.
+        num_classes (int): The number of classes or face shapes to predict.
+
+    Returns:
+        tuple: A tuple containing the user's selfie image and a list of predicted face shapes with their probabilities.
+            - user_selfie (PIL.Image.Image): The user's selfie image.
+            - predicted_shapes_with_probabilities (list): A list of tuples containing the predicted face shape and its probability.
+                Each tuple has the format (face_shape, probability).
+
+    """
+
     # Load the model
     model = torchvision.models.efficientnet_b4(weights='EfficientNet_B4_Weights.IMAGENET1K_V1')
     model.classifier = nn.Sequential(
