@@ -6,3 +6,6 @@ To train and test the CNN models
 
 To run the CNN application
 ```python3 CNN-app.py```
+
+To uninstall dependencies
+```pip3 uninstall -r requirements.txt```
