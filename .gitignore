@@ -85,4 +85,4 @@ next-env.d.ts
 
 __pycache__
 
-/model/*
+*.pth
