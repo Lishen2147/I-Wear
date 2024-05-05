@@ -4,6 +4,7 @@ import torchvision
 import torch.nn as nn
 import torchvision.transforms as T
 from PIL import Image
+import json
 
 # os.environ["OMP_NUM_THREADS"] = "1"
 
@@ -70,7 +71,8 @@ from PIL import Image
 # plt.title(f"Predicted face shape: {predicted_shape}")
 # plt.axis('off')
 # plt.show()
-
+constants_file = open("../constants.json")
+model_constants = json.load(constants_file)["model_params"]
 def predict_face_shape(user_selfie_path, model_path, num_classes):
     # Load the model
     model = torchvision.models.efficientnet_b4(weights='EfficientNet_B4_Weights.IMAGENET1K_V1')
@@ -78,7 +80,7 @@ def predict_face_shape(user_selfie_path, model_path, num_classes):
         nn.Dropout(p=0.3, inplace=True),
         nn.Linear(model.classifier[1].in_features, num_classes)
     )
-    model.load_state_dict(torch.load(model_path))
+    model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
     model.eval()
 
     # Define preprocessing transformations
@@ -99,18 +101,18 @@ def predict_face_shape(user_selfie_path, model_path, num_classes):
 
     # Decode predictions
     probabilities = torch.softmax(output, dim=1)[0]  # Convert logits to probabilities
-    face_shapes = ['Heart', 'Round', 'Oval', 'Square', 'Diamond', 'Oblong']  # Replace with your actual labels
+    face_shapes = model_constants["facial_structure_classes"]  # Replace with your actual labels
     predicted_shapes_with_probabilities = [(face_shape, probability.item()) for face_shape, probability in zip(face_shapes, probabilities)]
 
     return user_selfie, predicted_shapes_with_probabilities
 
-# Example usage:
-USER_SELFIE_PATH = './tests/test1.jpg'
-MODEL_PATH = './outputs/best_model_kaggle.pth'
-NUM_CLASSES = 5
+# # Example usage:
+# USER_SELFIE_PATH = './tests/test1.jpg'
+# MODEL_PATH = './outputs/best_model_kaggle.pth'
+# NUM_CLASSES = model_constants["num_classes"]
 
-user_selfie, predicted_shapes_with_probabilities = predict_face_shape(USER_SELFIE_PATH, MODEL_PATH, NUM_CLASSES)
+# user_selfie, predicted_shapes_with_probabilities = predict_face_shape(USER_SELFIE_PATH, MODEL_PATH, NUM_CLASSES)
 
-print("Predicted face shapes with probabilities:")
-for shape, probability in predicted_shapes_with_probabilities:
-    print(f"Face shape: {shape}, Probability: {probability:.2f}")
+# print("Predicted face shapes with probabilities:")
+# for shape, probability in predicted_shapes_with_probabilities:
+#     print(f"Face shape: {shape}, Probability: {probability:.2f}")

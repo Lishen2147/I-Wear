@@ -15,6 +15,7 @@ const POST_URL = "http://localhost:8080/predict";
 
   const formSubmitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    try {
     setIsRequesting(true);
     setIsLoading(true);
     const data = await fetch(POST_URL, {
@@ -24,7 +25,8 @@ const POST_URL = "http://localhost:8080/predict";
       },
       body: JSON.stringify({image}),
     });
-    const response = await data.json();
+      const response = await data.json();
+    
     setIsLoading(false);
     if (response.response_code != 200) {
         setIsRequesting(false);
@@ -37,6 +39,11 @@ const POST_URL = "http://localhost:8080/predict";
         setFaceStructure(null);
 
     }, 10000);
+  } catch {
+    setIsRequesting(false);
+      setFaceStructure(null);
+      setIsLoading(false);
+  }
 };
 
 
