@@ -51,7 +51,8 @@ next-env.d.ts
 /AI-model/datasets/training_set
 
 # Ignore large saved .pth files
-*.pth
+best_model_self.pth
+best_model_kaggle.pth
 
 # Ignore credentials
 
