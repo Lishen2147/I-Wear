@@ -9,7 +9,7 @@ def image_to_base64(image):
     return img_str
 
 # Load an image
-image_path = './tests/gsimmons.jpg'
+image_path = './AI-model/tests/test21.jpg'
 image = cv2.imread(image_path)
 
 # Load the pre-trained Haar cascade for face detection
