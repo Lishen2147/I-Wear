@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Load an image
-image_path = './tests/test21.jpg'
+image_path = './AI-model/tests/test21.jpg'
 image = cv2.imread(image_path)
 
 # Load the pre-trained Haar cascade for face detection
@@ -122,19 +122,19 @@ def generate_overlays(image, faces, glasses_dict, faces_pred, glasses_idx):
         # Detect facial landmarks (simplified example)
         landmarks = [(x + int(w * 0.35), y + int(h * 0.45)), (x + int(w * 0.65), y + int(h * 0.45))]
         landmarks_list.append(landmarks)
-    
+
     for i in range(3):
         # Overlay the glasses onto the face
         output_image = overlay_glasses(image.copy(), glasses_image, landmarks_list)
         output_image = resize_to_fit_window(output_image)
         overlays.append(output_image)
-        
+
         # # Display the resulting image
         # cv2.imshow(f'Glasses Overlay ({glasses_shape} glasses)', output_image)
-    
+
         # # Wait for user input
         # key = cv2.waitKey(0)
-        
+
         glasses_idx = (glasses_idx + 1) % len(glasses_dict[faces_pred])
 
     return overlays
@@ -146,7 +146,7 @@ generate_overlays(image, faces, glasses_dict, faces_pred, glasses_idx)
 #     glasses_image_path = glasses_dict[faces_pred][glasses_idx]
 #     glasses_image = remove_white_background(glasses_image_path)
 #     glasses_shape = glasses_image_path.split("/")[-1].split(".")[0]
-    
+
 #     landmarks_list = []
 
 #     # Iterate over detected faces
@@ -161,7 +161,7 @@ generate_overlays(image, faces, glasses_dict, faces_pred, glasses_idx)
 
 #     # Display the resulting image
 #     cv2.imshow(f'Glasses Overlay ({glasses_shape} glasses)', output_image)
-    
+
 #     # Wait for user input
 #     key = cv2.waitKey(0) & 0xFF
 
