@@ -1,3 +1,6 @@
+Go to the AI-model directory (where the CNN scripts are located)
+```cd AI-model```
+
 To install dependencies
 ```pip3 install -r requirements.txt```
 

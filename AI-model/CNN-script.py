@@ -14,8 +14,7 @@ NUM_WORKERS = os.cpu_count() - 1
 DATASETS_PATH = './datasets'
 TRAIN_PATH = os.path.join(DATASETS_PATH, './training_set')
 TEST_PATH = os.path.join(DATASETS_PATH, './testing_set')
-SAVE_PLOT_PATH = './outputs/training_history.png'
-SAVE_MODEL_PATH = './outputs/best_model.pth'
+SAVE_RESULTS_PATH = './outputs'
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 torch.manual_seed(42)
 os.environ["OMP_NUM_THREADS"] = "1"
@@ -58,7 +57,7 @@ criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, betas=(0.9, 0.999), weight_decay=0.01)
 
 # Train the model
-train_losses, train_accuracies = utils.train_model(model, train_loader, criterion, optimizer, DEVICE, NUM_EPOCHS)
-utils.plot_and_save_training_history(train_losses, train_accuracies, SAVE_PLOT_PATH)
-utils.test_model(model, test_loader, criterion, DEVICE)
-utils.save_model(model, SAVE_MODEL_PATH)
+train_losses, train_accuracies = utils.train_model(model, train_loader, criterion, optimizer, DEVICE, NUM_EPOCHS, SAVE_RESULTS_PATH)
+utils.plot_and_save_training_history(train_losses, train_accuracies, SAVE_RESULTS_PATH)
+utils.test_model(model, test_loader, criterion, DEVICE, SAVE_RESULTS_PATH)
+utils.save_model(model, SAVE_RESULTS_PATH)

@@ -29,7 +29,7 @@ def safe_pil_loader(path):
     except (OSError, SyntaxError):
         return Image.new('RGB', (224, 224))
 
-def train_model(model, train_loader, criterion, optimizer, device, num_epochs):
+def train_model(model, train_loader, criterion, optimizer, device, num_epochs, save_path=None):
     """
     Trains a given model using the provided data loader, criterion, optimizer, and device for a specified number of epochs.
 
@@ -40,6 +40,7 @@ def train_model(model, train_loader, criterion, optimizer, device, num_epochs):
         optimizer (torch.optim.Optimizer): The optimizer used for updating the model's parameters.
         device (torch.device): The device (CPU or GPU) on which the model and data should be loaded.
         num_epochs (int): The number of epochs to train the model.
+        save_path (str): The path to save the training loss and accuracy history.
 
     Returns:
         tuple: A tuple containing two lists - train_losses and train_accuracies.
@@ -49,6 +50,10 @@ def train_model(model, train_loader, criterion, optimizer, device, num_epochs):
 
     print("Starting training...")
 
+    complete_path = os.path.join(save_path, 'training_loss_accuracy.csv')
+    f = open(complete_path, 'w')
+    f.write("Epoch,Train Loss,Train Accuracy\n")
+    model.train()
     train_losses = []
     train_accuracies = []
 
@@ -60,7 +65,6 @@ def train_model(model, train_loader, criterion, optimizer, device, num_epochs):
         # print("Not using Scaler")
 
     for epoch in range(num_epochs):
-        model.train()
         epoch_train_losses = []
         correct = 0
         total = 0
@@ -99,18 +103,23 @@ def train_model(model, train_loader, criterion, optimizer, device, num_epochs):
         train_accuracies.append(accuracy)
 
         print(f"Epoch {epoch+1}/{num_epochs}, Train Loss: {avg_train_loss:.4f}, Train Accuracy: {accuracy:.2f}%")
+        f.write(f"{epoch+1},{avg_train_loss},{accuracy}\n")
+
+    print(f"Training loss and accuracy saved successfully at {complete_path}.")
 
     return train_losses, train_accuracies
 
-def test_model(model, test_loader, criterion, device):
+def test_model(model, test_loader, criterion, device, save_path=None):
     """
     Function to test a machine learning model on a given test dataset.
+    Performance metrics include loss, accuracy, precision, recall, and F1 score.
 
     Args:
         model (torch.nn.Module): The trained model to be tested.
         test_loader (torch.utils.data.DataLoader): The data loader for the test dataset.
         criterion: The loss function used for evaluation.
         device (torch.device): The device (CPU or GPU) on which the testing will be performed.
+        save_path (str): The path to save the model performance metrics.
 
     Returns:
         None
@@ -125,6 +134,9 @@ def test_model(model, test_loader, criterion, device):
 
     print("Starting testing...")
 
+    complete_path = os.path.join(save_path, 'model_performance.csv')
+    f = open(complete_path, 'w')
+    f.write("Test Loss,Accuracy,Precision,Recall,F1 Score\n")
     model.eval()
     test_losses = []
     all_predictions = []
@@ -149,6 +161,8 @@ def test_model(model, test_loader, criterion, device):
     f1 = f1_score(all_labels, all_predictions, average='macro')
 
     print(f"Test Loss: {avg_test_loss:.4f}, Accuracy: {accuracy:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1 Score: {f1:.4f}")
+    f.write(f"{avg_test_loss:.4f},{accuracy:.4f},{precision:.4f},{recall:.4f},{f1:.4f}")
+    print(f"Model performance metrics saved successfully at {complete_path}.")
 
 def plot_and_save_training_history(train_losses, train_accuracies, save_path):
     """
@@ -171,7 +185,7 @@ def plot_and_save_training_history(train_losses, train_accuracies, save_path):
     plt.title('Training Loss')
     plt.legend()
     plt.grid(True)
-    plt.savefig(save_path + "_loss.png")  # Save plot as an image
+    plt.savefig(os.path.join(save_path, "train_loss_history.png"))  # Save plot as an image
     plt.close()
 
     # Plotting training accuracy
@@ -182,10 +196,10 @@ def plot_and_save_training_history(train_losses, train_accuracies, save_path):
     plt.title('Training Accuracy')
     plt.legend()
     plt.grid(True)
-    plt.savefig(save_path + "_accuracy.png")  # Save plot as an image
+    plt.savefig(os.path.join(save_path, "train_accuracy_history.png"))  # Save plot as an image
     plt.close()
 
-    print("Plots saved successfully.")
+    print("Training loss and accuracy plots saved successfully.")
 
 def save_model(model, save_path):
     """
@@ -199,5 +213,7 @@ def save_model(model, save_path):
         None
     """
 
-    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    torch.save(model.state_dict(), save_path)
+    complete_path = os.path.join(save_path, 'best_model.pth')
+    os.makedirs(os.path.dirname(complete_path), exist_ok=True)
+    torch.save(model.state_dict(), complete_path)
+    print(f"Model saved successfully at {complete_path}.")
