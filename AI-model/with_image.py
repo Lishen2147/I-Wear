@@ -1,8 +1,15 @@
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
+import base64
+
+def image_to_base64(image):
+    _, buffer = cv2.imencode('.png', image)
+    img_str = base64.b64encode(buffer).decode('utf-8')
+    return img_str
 
 # Load an image
-image_path = './tests/test21.jpg'
+image_path = './tests/gsimmons.jpg'
 image = cv2.imread(image_path)
 
 # Load the pre-trained Haar cascade for face detection
@@ -20,8 +27,8 @@ assert len(faces) == 1, f"Only one face is allowed. Number of faces detected: {l
 # Function to resize image to fit window size
 def resize_to_fit_window(image):
     # Get dimensions of the window
-    screen_width = 1080  # Change this to the width of your screen or window
-    screen_height = 1080  # Change this to the height of your screen or window
+    screen_width = 1080
+    screen_height = 1080
 
     # Get dimensions of the image
     img_height, img_width = image.shape[:2]
@@ -57,8 +64,7 @@ def remove_white_background(image_path):
 
     return img
 
-# Define a function to overlay glasses
-# Function to overlay the glasses onto the face
+# Overlay glasses on the face
 def overlay_glasses(face_img, glasses_img, landmarks):
     output_img = face_img.copy()
     for landmark in landmarks:
@@ -87,7 +93,6 @@ def overlay_glasses(face_img, glasses_img, landmarks):
 
     return output_img
 
-
 glasses_path = "./glasses"
 
 # Define a dictionary to store the glasses options for each face shape
@@ -109,8 +114,8 @@ glasses_idx = 0
 
 overlays = []
 
-def generate_overlays(image, faces, glasses_dict, faces_pred, glasses_idx):
-    # Load glasses image
+for i in range(3):
+    # Load the glasses image
     glasses_image_path = glasses_dict[faces_pred][glasses_idx]
     glasses_image = remove_white_background(glasses_image_path)
     glasses_shape = glasses_image_path.split("/")[-1].split(".")[0]
@@ -122,56 +127,35 @@ def generate_overlays(image, faces, glasses_dict, faces_pred, glasses_idx):
         # Detect facial landmarks (simplified example)
         landmarks = [(x + int(w * 0.35), y + int(h * 0.45)), (x + int(w * 0.65), y + int(h * 0.45))]
         landmarks_list.append(landmarks)
+
+    # Overlay the glasses onto the face
+    output_image = overlay_glasses(image.copy(), glasses_image, landmarks_list)
+    output_image = resize_to_fit_window(output_image)
+    overlays.append(output_image)
     
-    for i in range(3):
-        # Overlay the glasses onto the face
-        output_image = overlay_glasses(image.copy(), glasses_image, landmarks_list)
-        output_image = resize_to_fit_window(output_image)
-        overlays.append(output_image)
-        
-        # # Display the resulting image
-        # cv2.imshow(f'Glasses Overlay ({glasses_shape} glasses)', output_image)
+    glasses_idx = (glasses_idx + 1) % len(glasses_dict[faces_pred])
+
+# Display the overlays using matplotlib
+fig, axes = plt.subplots(1, len(overlays), figsize=(12, 6))
+base64_images = []
+
+# Plot the overlayed images and get base64 strings
+for i, overlay in enumerate(overlays):
+    # Convert overlay to RGB for displaying with matplotlib
+    overlay_rgb = cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB)
     
-        # # Wait for user input
-        # key = cv2.waitKey(0)
-        
-        glasses_idx = (glasses_idx + 1) % len(glasses_dict[faces_pred])
-
-    return overlays
-
-generate_overlays(image, faces, glasses_dict, faces_pred, glasses_idx)
-
-# while True:
-#     # Load glasses image
-#     glasses_image_path = glasses_dict[faces_pred][glasses_idx]
-#     glasses_image = remove_white_background(glasses_image_path)
-#     glasses_shape = glasses_image_path.split("/")[-1].split(".")[0]
+    # Display the overlay image
+    axes[i].imshow(overlay_rgb)
+    axes[i].axis('off')
+    glasses_shape = glasses_dict[faces_pred][i % len(glasses_dict[faces_pred])].split("/")[-1].split(".")[0]
+    axes[i].set_title(f'Glasses Overlay ({glasses_shape} glasses)')
     
-#     landmarks_list = []
+    # Convert overlay image to base64
+    base64_img = image_to_base64(overlay)
+    base64_images.append(base64_img)
 
-#     # Iterate over detected faces
-#     for (x, y, w, h) in faces:
-#         # Detect facial landmarks (simplified example)
-#         landmarks = [(x + int(w * 0.35), y + int(h * 0.45)), (x + int(w * 0.65), y + int(h * 0.45))]
-#         landmarks_list.append(landmarks)
+plt.show()
 
-#     # Overlay the glasses onto the face
-#     output_image = overlay_glasses(image.copy(), glasses_image, landmarks_list)
-#     output_image = resize_to_fit_window(output_image)
-
-#     # Display the resulting image
-#     cv2.imshow(f'Glasses Overlay ({glasses_shape} glasses)', output_image)
-    
-#     # Wait for user input
-#     key = cv2.waitKey(0) & 0xFF
-
-#     # If 'n' key is pressed, move to the next glasses option
-#     if key == ord('n'):
-#         glasses_idx = (glasses_idx + 1) % len(glasses_dict[faces_pred])
-
-#     # If 'q' key is pressed, quit the loop
-#     elif key == ord('q'):
-#         break
-
-# # Close all windows
-# cv2.destroyAllWindows()
+# Print the base64 strings
+for idx, b64 in enumerate(base64_images):
+    print(f"Image {idx + 1} (Base64): {b64}")
