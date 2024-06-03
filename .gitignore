@@ -45,3 +45,18 @@ next-env.d.ts
 
 # Ignore credentials
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Ignore 670MB of datasets
+# /AI-model/datasets/testing_set
+# /AI-model/datasets/training_set
+
+# Ignore large saved .pth files
+best_model_self.pth
+best_model_kaggle.pth
+
+# Ignore credentials
+
+# Ignore system files
+/AI-model/__pycache__
+.DS_Store
+*:Zone.Identifier
