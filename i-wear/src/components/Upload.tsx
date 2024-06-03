@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import UploadForm from "./subcomponents/Upload/UploadForm";
 import Response from "./subcomponents/Upload/Response";
 
+
 interface UploadProps {
   base64Image: string | null;
   setBase64Image: React.Dispatch<React.SetStateAction<string | null>>;
@@ -14,6 +15,8 @@ interface UploadProps {
   faceStructure: string | null;
   setFaceStructure: React.Dispatch<React.SetStateAction<string | null>>;
   setProbabilities: React.Dispatch<React.SetStateAction<number[] | null>>;
+  generatedImages: string[] | null;
+  setGeneratedImages: React.Dispatch<React.SetStateAction<string[] | null>>;
 }
 
 const Upload: React.FC<UploadProps> = ({base64Image, setBase64Image, isRequesting,
@@ -21,7 +24,7 @@ const Upload: React.FC<UploadProps> = ({base64Image, setBase64Image, isRequestin
   isLoading,
   setIsLoading,
   faceStructure,
-  setFaceStructure, setProbabilities}) => {
+  setFaceStructure, setProbabilities, generatedImages, setGeneratedImages}) => {
 
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,11 +40,11 @@ const Upload: React.FC<UploadProps> = ({base64Image, setBase64Image, isRequestin
       reader.readAsDataURL(file);
     }
   };
-
   return (
     <div>
-      <UploadForm onFileChange={handleImageChange} image={base64Image} setFaceStructure={setFaceStructure} setIsLoading={setIsLoading} setIsRequesting={setIsRequesting} setProbabilities={setProbabilities} />
+      <UploadForm onFileChange={handleImageChange} image={base64Image} setFaceStructure={setFaceStructure} setIsLoading={setIsLoading} setIsRequesting={setIsRequesting} setProbabilities={setProbabilities} setGeneratedImages={setGeneratedImages} />
       <Response isLoading={isLoading} isRequesting={isRequesting} faceStructure={faceStructure} />
+      {generatedImages && <img src={`data:image/png;base64,${generatedImages[0]}`} alt="Base64 Image" />}
     </div>
   );
 };

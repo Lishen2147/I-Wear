@@ -9,10 +9,12 @@ interface UploadFormProps {
   setFaceStructure: React.Dispatch<React.SetStateAction<string | null>>
   setIsRequesting: React.Dispatch<React.SetStateAction<boolean>>
   setProbabilities: React.Dispatch<React.SetStateAction<number[] | null>>;
+  setGeneratedImages: React.Dispatch<React.SetStateAction<string[] | null>>;
 }
 
-const UploadForm: React.FC<UploadFormProps> = ({ image, onFileChange, setIsLoading, setFaceStructure, setIsRequesting, setProbabilities}) => {
+const UploadForm: React.FC<UploadFormProps> = ({ image, onFileChange, setIsLoading, setFaceStructure, setIsRequesting, setProbabilities, setGeneratedImages}) => {
 const POST_URL = "http://localhost:8080/predict";
+const GENERATE_IMAGE_URL = "http://localhost:8080/glasses";
 
   const formSubmitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -41,6 +43,16 @@ const POST_URL = "http://localhost:8080/predict";
         setFaceStructure(null);
         setProbabilities(response.prediction_probabilities)
     }, 20000);
+    const gen_data = await fetch(GENERATE_IMAGE_URL, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({image, prediction: response.prediction}),
+    });
+    const img_response = await gen_data.json();
+    setGeneratedImages(img_response.images);
+
   } catch {
     setIsRequesting(false);
     setIsLoading(false);
