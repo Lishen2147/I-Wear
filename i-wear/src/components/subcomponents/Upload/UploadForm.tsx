@@ -8,13 +8,15 @@ interface UploadFormProps {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setFaceStructure: React.Dispatch<React.SetStateAction<string | null>>
   setIsRequesting: React.Dispatch<React.SetStateAction<boolean>>
+  setProbabilities: React.Dispatch<React.SetStateAction<number[] | null>>;
 }
 
-const UploadForm: React.FC<UploadFormProps> = ({ image, onFileChange, setIsLoading, setFaceStructure, setIsRequesting }) => {
+const UploadForm: React.FC<UploadFormProps> = ({ image, onFileChange, setIsLoading, setFaceStructure, setIsRequesting, setProbabilities}) => {
 const POST_URL = "http://localhost:8080/predict";
 
   const formSubmitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    try {
     setIsRequesting(true);
     setIsLoading(true);
     const data = await fetch(POST_URL, {
@@ -24,7 +26,8 @@ const POST_URL = "http://localhost:8080/predict";
       },
       body: JSON.stringify({image}),
     });
-    const response = await data.json();
+      const response = await data.json();
+    
     setIsLoading(false);
     if (response.response_code != 200) {
         setIsRequesting(false);
@@ -32,11 +35,16 @@ const POST_URL = "http://localhost:8080/predict";
         return
     }
     setFaceStructure(response.prediction);
+    setProbabilities(response.prediction_probabilities)
     setTimeout(() => {
         setIsRequesting(false);
         setFaceStructure(null);
-
-    }, 10000);
+        setProbabilities(response.prediction_probabilities)
+    }, 20000);
+  } catch {
+    setIsRequesting(false);
+    setIsLoading(false);
+  }
 };
 
 

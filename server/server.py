@@ -3,14 +3,19 @@ from flask_cors import CORS
 import warnings
 import pickle
 import base64
+import json
+import numpy as np
+
+from ai_model.CNN_app import predict_face_shape
+
+constants_file = open("../constants.json")
+model_constants = json.load(constants_file)["model_params"]
+MODEL_PATH = "../model/best_model.pth"
 
 app = Flask(__name__)
 CORS(app)
 warnings.filterwarnings("ignore")
 
-# Load the model
-
-# Create processing function w/ PIL for image
 
 @app.route('/predict', methods=['POST'])
 def predict(): 
@@ -18,20 +23,30 @@ def predict():
 
     if data is None or 'image' not in data:
         return jsonify({'prediction': 'failed', 'error': 'No image data provided'}), 400
+    try:
+        base64_image = data['image']
 
-    base64_image = data['image']
-    
-    if not base64_image.startswith("data:image"):
-        return jsonify({'prediction': 'failed', 'error': 'Invalid image data'}), 400
+        if not base64_image.startswith("data:image"):
+            return jsonify({'prediction': 'failed', 'error': 'Invalid image data'}), 400
 
-    base64_data = base64_image.split(',')[1]
+        base64_data = base64_image.split(',')[1]
 
-    image_data = base64.b64decode(base64_data)
+        image_data = base64.b64decode(base64_data)
 
-    with open('uploaded_image.png', 'wb') as f:
-        f.write(image_data)
+        image_type = "jpg" if "jpeg" in base64_image.lower() else "png"
+        file_path = f'./uploaded_image.{image_type}'
 
-    return jsonify({'prediction': 'ROUND', 'error': 'null', 'response_code': 200}), 200
+        with open(file_path, 'wb') as f:
+            f.write(image_data)
+
+        _, predicted_shapes_with_probabilities = predict_face_shape("./uploaded_image.jpg", MODEL_PATH, model_constants["num_classes"])
+
+        predict_structure = model_constants["facial_structure_classes"][np.argmax(predicted_shapes_with_probabilities) - 1]
+
+
+        return jsonify({'prediction': predict_structure, 'prediction_probabilities': predicted_shapes_with_probabilities, 'error': 'null', 'response_code': 200}), 200
+    except:
+        return jsonify({'prediction': None, 'prediction_probabilities': None, 'error': 'null', 'response_code': 400}), 400
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
