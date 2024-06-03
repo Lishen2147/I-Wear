@@ -1,9 +1,10 @@
 # Ignore 670MB of datasets
-/AI-model/datasets/testing_set
-/AI-model/datasets/training_set
+# /AI-model/datasets/testing_set
+# /AI-model/datasets/training_set
 
 # Ignore large saved .pth files
-*.pth
+best_model_self.pth
+best_model_kaggle.pth
 
 # Ignore credentials
 
