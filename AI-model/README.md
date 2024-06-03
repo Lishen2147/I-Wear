@@ -1,0 +1,14 @@
+Go to the AI-model directory (where the CNN scripts are located)
+```cd AI-model```
+
+To install dependencies
+```pip3 install -r requirements.txt```
+
+To train and test the CNN models
+```python3 CNN-script.py```
+
+To run the CNN application
+```python3 CNN-app.py```
+
+To uninstall dependencies
+```pip3 uninstall -r requirements.txt```
