@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 from torch.cuda.amp import GradScaler
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
 
 def safe_pil_loader(path):
     """
@@ -48,11 +48,16 @@ def train_model(model, train_loader, criterion, optimizer, device, num_epochs, s
             - train_accuracies (list): A list of training accuracies (in percentage) for each epoch.
     """
 
-    print("Starting training...")
+    print("Start training...")
 
-    complete_path = os.path.join(save_path, 'training_loss_accuracy.csv')
-    f = open(complete_path, 'w')
-    f.write("Epoch,Train Loss,Train Accuracy\n")
+    if save_path:
+        # Initialize result redirection to csv file
+        os.makedirs(save_path, exist_ok=True)
+        complete_path = os.path.join(save_path, 'training_loss_accuracy.csv')
+        f = open(complete_path, 'w')
+        f.write("Epoch,Train Loss,Train Accuracy\n")
+
+    # Initialize model mode and data tracking
     model.train()
     train_losses = []
     train_accuracies = []
@@ -103,8 +108,11 @@ def train_model(model, train_loader, criterion, optimizer, device, num_epochs, s
         train_accuracies.append(accuracy)
 
         print(f"Epoch {epoch+1}/{num_epochs}, Train Loss: {avg_train_loss:.4f}, Train Accuracy: {accuracy:.2f}%")
-        f.write(f"{epoch+1},{avg_train_loss},{accuracy}\n")
 
+        if save_path:
+            f.write(f"{epoch+1},{avg_train_loss},{accuracy}\n")
+
+    f.close()
     print(f"Training loss and accuracy saved successfully at {complete_path}.")
 
     return train_losses, train_accuracies
@@ -132,11 +140,15 @@ def test_model(model, test_loader, criterion, device, save_path=None):
         F1 Score: The F1 score of the model on the test dataset.
     """
 
-    print("Starting testing...")
+    print("Start testing...")
 
-    complete_path = os.path.join(save_path, 'model_performance.csv')
-    f = open(complete_path, 'w')
-    f.write("Test Loss,Accuracy,Precision,Recall,F1 Score\n")
+    if save_path:
+        # Initialize result redirection to csv
+        os.makedirs(save_path, exist_ok=True)
+        complete_path = os.path.join(save_path, 'model_performance.csv')
+        f = open(complete_path, 'w')
+        f.write("Class,Precision,Recall,F1 Score,Accuracy\n")
+
     model.eval()
     test_losses = []
     all_predictions = []
@@ -161,8 +173,23 @@ def test_model(model, test_loader, criterion, device, save_path=None):
     f1 = f1_score(all_labels, all_predictions, average='macro')
 
     print(f"Test Loss: {avg_test_loss:.4f}, Accuracy: {accuracy:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1 Score: {f1:.4f}")
-    f.write(f"{avg_test_loss:.4f},{accuracy:.4f},{precision:.4f},{recall:.4f},{f1:.4f}")
-    print(f"Model performance metrics saved successfully at {complete_path}.")
+
+    # Calculate and print metrics for each class
+    class_report = classification_report(all_labels, all_predictions, output_dict=True)
+    print("Classification Report for each class:")
+    print(classification_report(all_labels, all_predictions))
+
+    if save_path:
+        for class_label, metrics in class_report.items():
+            if class_label.isdigit():  # Exclude 'accuracy' and other summary metrics
+                f.write(f"{class_label},{metrics['precision']:.4f},{metrics['recall']:.4f},{metrics['f1-score']:.4f},{accuracy:.4f}\n")
+
+        # Write overall metrics
+        f.write(f"Overall,{precision:.4f},{recall:.4f},{f1:.4f},{accuracy:.4f}\n")
+
+        f.close()
+        print(f"Model performance metrics saved successfully at {complete_path}.")
+
 
 def plot_and_save_training_history(train_losses, train_accuracies, save_path):
     """
@@ -182,7 +209,7 @@ def plot_and_save_training_history(train_losses, train_accuracies, save_path):
     plt.plot(range(1, len(train_losses) + 1), train_losses, label='Training Loss', color='blue')
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
-    plt.title('Training Loss')
+    plt.title('EfficientNet_B4 Training Loss')
     plt.legend()
     plt.grid(True)
     plt.savefig(os.path.join(save_path, "train_loss_history.png"))  # Save plot as an image
@@ -193,7 +220,7 @@ def plot_and_save_training_history(train_losses, train_accuracies, save_path):
     plt.plot(range(1, len(train_accuracies) + 1), train_accuracies, label='Training Accuracy', color='green')
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy (%)')
-    plt.title('Training Accuracy')
+    plt.title('EfficientNet_B4 Training Accuracy')
     plt.legend()
     plt.grid(True)
     plt.savefig(os.path.join(save_path, "train_accuracy_history.png"))  # Save plot as an image

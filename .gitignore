@@ -9,6 +9,6 @@ best_model_kaggle.pth
 # Ignore credentials
 
 # Ignore system files
-/AI-model/__pycache__
+__pycache__
 .DS_Store
 *:Zone.Identifier
