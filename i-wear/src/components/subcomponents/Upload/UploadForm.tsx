@@ -77,21 +77,21 @@ const UploadForm: React.FC<UploadFormProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center gap-2 w-full">
+    <div className="flex flex-col items-center gap-2 bg-slate-200 p-4 rounded-lg border-2 border-yellow-500">
       <div className="flex flex-col gap-4">
         <h2 className="font-bold text-2xl underline underline-offset-1">
-          Facial Image
+          Try it out!
         </h2>
         {image ? (
           <Image
-            className="rounded-md border-emerald-500 border-4 object-cover object-center"
+            className="rounded-md border-indigo-500 border-4 object-cover object-center"
             src={image}
             width={450}
             height={450}
             alt="Uploaded"
           />
         ) : (
-          <div className="w-60 h-60 bg-gray-300 rounded-md border-emerald-500 border-4 flex items-center justify-center">
+          <div className="w-60 h-60 bg-gray-300 rounded-md border-indigo-500 border-4 flex items-center justify-center">
             <div className="w-[95%] h-[95%] bg-black flex items-center justify-center">
               <p className="text-white text-center text-4xl animate-pulse">
                 D:

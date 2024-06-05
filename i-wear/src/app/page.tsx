@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import Header from "../components/Header";
-import Upload from "../components/Upload";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Upload from "@/components/Upload";
 import PredictionProbabilties from "@/components/PredictionProbabilities";
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
   const [probabilities, setProbabilities] = useState<number[] | null>(null);
   const [generatedImages, setGeneratedImages] = useState<string[] | null>(null);
   return (
-    <main className="w-screen bg-gray-100 flex flex-col items-center gap-8">
+    <main className="bg-gray-100 flex flex-col items-center">
       <Header />
       <Upload
         base64Image={base64Image}
@@ -29,6 +30,7 @@ export default function Home() {
         setGeneratedImages={setGeneratedImages}
       />
       <PredictionProbabilties probabilities={probabilities} />
+      <Footer />
     </main>
   );
 }

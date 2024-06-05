@@ -21,7 +21,9 @@ const Response: React.FC<ResponseProps> = ({
   return (
     <div>
       {!isRequesting ? (
-        <div className="text-xl font-semibold">Input an image of a face to get started!</div>
+        <div className="text-md font-semibold">
+          Input a face to get started!
+        </div>
       ) : (
         <Loading
           isLoading={isLoading}

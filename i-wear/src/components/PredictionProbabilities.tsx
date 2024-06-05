@@ -14,7 +14,7 @@ const PredictionProbabilties: React.FC<PredictionProbabiltiesProps> = ({
     return <></>;
   } else {
     return (
-      <div className="flex flex-col items-center gap-8 p-8">
+      <div className="flex flex-col items-center gap-8 p-12">
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-3xl font-semibold text-black">
             Information Metrics
@@ -26,17 +26,14 @@ const PredictionProbabilties: React.FC<PredictionProbabiltiesProps> = ({
         </div>
         <div className="flex flex-wrap gap-4">
           {probabilities?.map((prob, idx) => (
-            <ProbabilityItem
-              key={idx}
-              probability={prob}
-              classNumber={idx + 1}
-            />
+            <ProbabilityItem key={idx} probability={prob} />
           ))}
         </div>
         <div>
           <p>
-            * - we may have overexaggerated the facts. it was a pretrained model
-            that we tuned ourselves, but the results are still pretty good.
+            * - we may have overexaggerated the facts. it was a pre-structured
+            model that we tuned ourselves, but the results are still pretty
+            good.
           </p>
         </div>
       </div>

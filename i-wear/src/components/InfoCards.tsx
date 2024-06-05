@@ -27,7 +27,7 @@ export default function InfoCards() {
       <div className="flex flex-col gap-6 items-center">
         <div className="flex flex-col gap-1 items-center">
           <h1 className="text-xl font-extrabold">
-            Eyewear catered just for you.
+            Eyewear catered to you.
           </h1>
           <p className="text-sm">
             We provide you with the best options based on your facial structure.

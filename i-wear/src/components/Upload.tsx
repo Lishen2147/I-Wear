@@ -48,8 +48,16 @@ const Upload: React.FC<UploadProps> = ({
     }
   };
   return (
-    <div className="flex flex-col items-center w-full gap-8">
-      <div className="flex flex-row gap-8 items-center">
+    <div className="flex flex-col items-center w-full">
+      <div
+        className="flex flex-row gap-8 items-center justify-center w-full p-12"
+        style={{
+          backgroundImage:
+            "url(https://img.freepik.com/premium-photo/side-view-glasses-with-scenic-mountain-background_124507-261068.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <Hero />
         <UploadForm
           onFileChange={handleImageChange}
@@ -62,7 +70,12 @@ const Upload: React.FC<UploadProps> = ({
         />
       </div>
       <div className="flex flex-col items-center gap-2 w-full p-12 bg-gradient-to-r from-blue-300 via-purple-300 to-slate-200">
-        <div className="text-3xl font-semibold text-black">I-Testing Site</div>
+        <div className="flex flex-col items-center gap-2">
+          <h1 className="text-3xl font-semibold text-black">I-Wear Viewer</h1>
+          <p className="text-lg">
+            Preview our best selections curated to complement your features
+          </p>
+        </div>
         <Response
           isLoading={isLoading}
           isRequesting={isRequesting}
