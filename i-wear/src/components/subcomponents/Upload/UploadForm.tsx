@@ -39,8 +39,9 @@ const UploadForm: React.FC<UploadFormProps> = ({
       });
       const response = await data.json();
 
-      setIsLoading(false);
       if (response.response_code != 200) {
+        console.log("400 error");
+        setIsLoading(false);
         setIsRequesting(false);
         setFaceStructure(null);
         return;
@@ -50,7 +51,6 @@ const UploadForm: React.FC<UploadFormProps> = ({
       //   setFaceStructure(null);
       //   setProbabilities(response.prediction_probabilities);
       // }, 20000);
-      setIsLoading(true);
       const gen_data = await fetch(GENERATE_IMAGE_URL, {
         method: "POST",
         headers: {
@@ -61,6 +61,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
       const img_response = await gen_data.json();
       setIsLoading(false);
       if (img_response.images.length === 0) {
+        console.log("no images")
         setIsRequesting(false);
         setFaceStructure(null);
         setProbabilities(null);

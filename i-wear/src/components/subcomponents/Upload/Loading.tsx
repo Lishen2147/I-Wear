@@ -19,7 +19,7 @@ const Loading: React.FC<LoadingProps> = ({
   return (
     <div>
       {isLoading ? (
-        <div className="text-xl font-semibold">Loading...</div>
+        <div className="text-xl font-semibold text-black">Loading...</div>
       ) : (
         <div className="flex flex-col gap-4">
           <div className="text-2xl font-bold underline underline-offset-4 text-black">
