@@ -1,0 +1,54 @@
+# Ignore dependencies
+node_modules/
+.next/
+*/.pnp
+*.pnp.js
+*.yarn/install-state.gz
+
+# Ignore testing files
+*/coverage
+
+# Ignore Next.js build artifacts
+*/.next/
+*/out/
+
+# Ignore production builds
+*/build
+
+# Ignore miscellaneous files
+*.DS_Store
+*.pem
+
+# Ignore debugging logs
+*npm-debug.log*
+*yarn-debug.log*
+*yarn-error.log*
+
+# Ignore local environment files
+.env*.local
+
+# Ignore Vercel-related files
+.vercel
+
+# Ignore TypeScript build artifacts
+*.tsbuildinfo
+next-env.d.ts
+
+# Ignore datasets
+/ai_model/datasets/testing_set
+/ai_model/datasets/training_set
+
+# Ignore large saved .pth files
+/ai_model/outputs/best_model_kaggle.pth
+/ai_model/outputs/best_model_self.pth
+
+# Ignore credentials
+# Replace 'credentials' with the specific file or directory name containing credentials
+
+# Ignore system files
+/AI-model/__pycache__
+.DS_Store
+*:Zone.Identifier
+*/__pycache__
+env/
+venv/
