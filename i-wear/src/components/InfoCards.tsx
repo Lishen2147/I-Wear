@@ -26,10 +26,10 @@ export default function InfoCards() {
     <div className="bg-white rounded-b-lg border-black p-4 flex justify-center w-fit h-fit">
       <div className="flex flex-col gap-6 items-center">
         <div className="flex flex-col gap-1 items-center">
-          <h1 className="text-xl font-extrabold">
+          <h1 className="text-xl font-extrabold text-black">
             Eyewear catered to you.
           </h1>
-          <p className="text-sm">
+          <p className="text-sm text-black">
             We provide you with the best options based on your facial structure.
           </p>
         </div>
@@ -37,11 +37,11 @@ export default function InfoCards() {
           {cardsData.map((card, index) => (
             <li
               key={index}
-              className="flex flex-col items-center gap-1 min-w-60"
+              className="flex flex-col items-center gap-1 min-w-60 text-black"
             >
               {card.icon}
-              <h2 className="text-lg font-bold">{card.title}</h2>
-              <p className="text-sm">{card.description}</p>
+              <h2 className="text-lg font-bold text-black">{card.title}</h2>
+              <p className="text-sm text-black">{card.description}</p>
             </li>
           ))}
         </ul>

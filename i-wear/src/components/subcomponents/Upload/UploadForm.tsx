@@ -79,7 +79,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
   return (
     <div className="flex flex-col items-center gap-2 bg-slate-200 p-4 rounded-lg border-2 border-yellow-500">
       <div className="flex flex-col gap-4">
-        <h2 className="font-bold text-2xl underline underline-offset-1">
+        <h2 className="font-bold text-2xl underline underline-offset-1 text-black">
           Try it out!
         </h2>
         {image ? (

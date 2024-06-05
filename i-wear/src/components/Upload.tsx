@@ -72,7 +72,7 @@ const Upload: React.FC<UploadProps> = ({
       <div className="flex flex-col items-center gap-2 w-full p-12 bg-gradient-to-r from-blue-300 via-purple-300 to-slate-200">
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-3xl font-semibold text-black">I-Wear Viewer</h1>
-          <p className="text-lg">
+          <p className="text-lg text-black">
             Preview our best selections curated to complement your features
           </p>
         </div>

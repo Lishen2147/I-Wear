@@ -21,7 +21,7 @@ const Response: React.FC<ResponseProps> = ({
   return (
     <div>
       {!isRequesting ? (
-        <div className="text-md font-semibold">
+        <div className="text-md font-semibold text-black">
           Input a face to get started!
         </div>
       ) : (

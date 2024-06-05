@@ -19,7 +19,7 @@ const PredictionProbabilties: React.FC<PredictionProbabiltiesProps> = ({
           <h1 className="text-3xl font-semibold text-black">
             Information Metrics
           </h1>
-          <p className="text-lg">
+          <p className="text-lg text-black">
             Obtained through our high performing custom model
             <span className="font-bold text-lg">*</span>
           </p>
@@ -30,7 +30,7 @@ const PredictionProbabilties: React.FC<PredictionProbabiltiesProps> = ({
           ))}
         </div>
         <div>
-          <p>
+          <p className="text-black">
             * - we may have overexaggerated the facts. it was a pre-structured
             model that we tuned ourselves, but the results are still pretty
             good.
