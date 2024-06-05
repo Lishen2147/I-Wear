@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import UploadForm from "./subcomponents/Upload/UploadForm";
 import Response from "./subcomponents/Upload/Response";
-
+import Hero from "./Hero";
 
 interface UploadProps {
   base64Image: string | null;
@@ -14,19 +14,26 @@ interface UploadProps {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   faceStructure: string | null;
   setFaceStructure: React.Dispatch<React.SetStateAction<string | null>>;
+  probabilities: number[] | null;
   setProbabilities: React.Dispatch<React.SetStateAction<number[] | null>>;
   generatedImages: string[] | null;
   setGeneratedImages: React.Dispatch<React.SetStateAction<string[] | null>>;
 }
 
-const Upload: React.FC<UploadProps> = ({base64Image, setBase64Image, isRequesting,
+const Upload: React.FC<UploadProps> = ({
+  base64Image,
+  setBase64Image,
+  isRequesting,
   setIsRequesting,
   isLoading,
   setIsLoading,
   faceStructure,
-  setFaceStructure, setProbabilities, generatedImages, setGeneratedImages}) => {
-
-
+  setFaceStructure,
+  probabilities,
+  setProbabilities,
+  generatedImages,
+  setGeneratedImages,
+}) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -41,10 +48,29 @@ const Upload: React.FC<UploadProps> = ({base64Image, setBase64Image, isRequestin
     }
   };
   return (
-    <div>
-      <UploadForm onFileChange={handleImageChange} image={base64Image} setFaceStructure={setFaceStructure} setIsLoading={setIsLoading} setIsRequesting={setIsRequesting} setProbabilities={setProbabilities} setGeneratedImages={setGeneratedImages} />
-      <Response isLoading={isLoading} isRequesting={isRequesting} faceStructure={faceStructure} />
-      {generatedImages && <img src={`data:image/png;base64,${generatedImages[0]}`} alt="Base64 Image" />}
+    <div className="flex flex-col items-center w-full gap-8">
+      <div className="flex flex-row gap-8 items-center">
+        <Hero />
+        <UploadForm
+          onFileChange={handleImageChange}
+          image={base64Image}
+          setFaceStructure={setFaceStructure}
+          setIsLoading={setIsLoading}
+          setIsRequesting={setIsRequesting}
+          setProbabilities={setProbabilities}
+          setGeneratedImages={setGeneratedImages}
+        />
+      </div>
+      <div className="flex flex-col items-center gap-2 w-full p-12 bg-gradient-to-r from-blue-300 via-purple-300 to-slate-200">
+        <div className="text-3xl font-semibold text-black">I-Testing Site</div>
+        <Response
+          isLoading={isLoading}
+          isRequesting={isRequesting}
+          faceStructure={faceStructure}
+          generatedImages={generatedImages}
+          probabilities={probabilities}
+        />
+      </div>
     </div>
   );
 };

@@ -104,8 +104,8 @@ def generate_images(faces_pred, image_base64):
     # Decode the NumPy array to an image
     img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
     is_good_image, faces = is_valid_image(img)
-    # if not is_good_image:
-    #     return []
+    if not is_good_image:
+        return []
     for key, value in glasses_dict.items():
         glasses_dict[key] = [f"{glasses_path}/{glasses}.png" for glasses in value]
     glasses_idx = 0

@@ -1,13 +1,15 @@
 "use client";
 
 import React from "react";
+import { FaHeart } from "react-icons/fa";
 
 const Header: React.FC = () => {
   return (
-    <header className="h-18 bg-white grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 py-4 px-6 space-x-8 border-b shadow-md z-50 select-none">
-      <div className="relative flex items-center space-x-3 xl:flex-grow cursor-pointer text-xl text-black">
-        I-Wear
+    <header className="flex flex-row items-center justify-between p-4 bg-gradient-to-br from-blue-400 via-sky-400 to-cyan-400 w-full">
+      <div className="font-semibold font-sans text-4xl text-white">
+      👓 I-Wear
       </div>
+      <FaHeart className="text-red-500 text-4xl transition-transform duration-500 hover:scale-125" />
     </header>
   );
 };

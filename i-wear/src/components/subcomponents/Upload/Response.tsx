@@ -4,18 +4,34 @@ import React from "react";
 import Loading from "./Loading";
 
 interface ResponseProps {
-    isLoading: boolean,
-    isRequesting: boolean,
-    faceStructure: string | null
+  isLoading: boolean;
+  isRequesting: boolean;
+  faceStructure: string | null;
+  generatedImages: string[] | null;
+  probabilities: number[] | null;
 }
 
-const Response: React.FC<ResponseProps> = ({isLoading, isRequesting, faceStructure}) => {
-
+const Response: React.FC<ResponseProps> = ({
+  isLoading,
+  isRequesting,
+  faceStructure,
+  generatedImages,
+  probabilities,
+}) => {
   return (
     <div>
-        {!isRequesting ? <div>INPUT IMAGE FOR FACIAL SHAPE</div> : <Loading isLoading={isLoading} faceStructure={faceStructure} />}
+      {!isRequesting ? (
+        <div className="text-xl font-semibold">Input an image of a face to get started!</div>
+      ) : (
+        <Loading
+          isLoading={isLoading}
+          faceStructure={faceStructure}
+          generatedImages={generatedImages}
+          probabilities={probabilities}
+        />
+      )}
     </div>
-  )
+  );
 };
 
 export default Response;
