@@ -20,7 +20,7 @@ DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 torch.manual_seed(42)
 os.environ["OMP_NUM_THREADS"] = "1"
 torch.backends.cudnn.enabled = False
-use_pretrained = True
+use_EfficientNet_B4 = True
 
 # Preprocess the image data
 train_transforms = T.Compose([
@@ -48,7 +48,7 @@ test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False, num
 # Load the model
 print("Loading the model")
 num_classes = len(train_dataset.classes)
-if use_pretrained:
+if use_EfficientNet_B4:
     # Load the pre-trained EfficientNet model
     model = torchvision.models.efficientnet_b4(weights='EfficientNet_B4_Weights.IMAGENET1K_V1')
     model.classifier = nn.Sequential(
